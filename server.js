@@ -100,6 +100,7 @@ function onconnect(socket) {
   socket.on('disconnect', function() {
       delete players[socket.name];
       delete sockets[socket.name];
+      sio.sockets.emit('announce_players', players);
   });
 
 }
