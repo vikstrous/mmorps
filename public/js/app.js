@@ -19,6 +19,7 @@ var players = {};
 var my_name = "anon";
 var played = true;
 var selection = -1;
+var score = 0;
 $('#state').text("Waiting for next round to start");
 
 var App = {
@@ -66,6 +67,7 @@ var App = {
       $('#right img').removeClass('border');
       $('#left img').removeClass('border');
     }
+    $('#score').text(score);
   }
 };
 
@@ -92,6 +94,7 @@ socket.on('outcome', function(data) {
   var state = '';
   if(data.you === 1){
     state = "You win! Choose again!";
+    score++;
   } else if(data.you === 2){
     state = "Draw. Choose again!";
   } else if (data.you === 0) {
@@ -102,8 +105,8 @@ socket.on('outcome', function(data) {
   state += ' Previous round -- left: ' + data.counts[0] + ' right: ' + data.counts[1];
   selection = -1;
   $('#state').text(state);
-  $('#left img').attr('src', data.new_images[0]);
-  $('#right img').attr('src', data.new_images[1]);
+  $('#left img').attr('src', '/images/'+data.new_images[0]);
+  $('#right img').attr('src', '/images/'+data.new_images[1]);
   played = false;
   App.render();
 });

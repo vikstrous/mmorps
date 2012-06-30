@@ -1,5 +1,6 @@
 var express = require('express'),
     stylus = require('stylus'),
+    fs = require('fs'),
    io = require('socket.io');
 
 var app = express.createServer();
@@ -39,8 +40,7 @@ var sockets = {};
 
 var interval = setInterval(tick, 15000);
 
-var all_images_str = 'http://imgur.com/r/pics/HXupz.png,http://i.imgur.com/6hfhmb.jpg,http://i.imgur.com/Pgu7bb.jpg,http://i.imgur.com/rjhkob.jpg,http://i.imgur.com/NGkmXb.jpg,http://i.imgur.com/mCy1lb.jpg,http://i.imgur.com/MCckqb.jpg,http://i.imgur.com/7dCuBb.jpg,http://i.imgur.com/EIPFzb.jpg,http://i.imgur.com/UoZPK.jpg,http://i.imgur.com/FSjwsb.jpg,http://i.imgur.com/F08i0b.jpg,http://i.imgur.com/mppayb.jpg,http://i.imgur.com/EOCmnb.jpg,http://i.imgur.com/pbIJ8b.jpg,http://i.imgur.com/NHdxab.jpg,http://i.imgur.com/wnkzQb.jpg,http://i.imgur.com/WdC8bb.jpg,http://i.imgur.com/XGJIWb.jpg,http://i.imgur.com/aNbhdb.jpg,http://i.imgur.com/BCM62b.jpg,http://i.imgur.com/t8XlSb.jpg,http://i.imgur.com/u5bD0b.jpg,http://i.imgur.com/STRI0b.jpg,http://i.imgur.com/f4ZUab.jpg,http://i.imgur.com/ikqE2b.jpg,http://i.imgur.com/tOjjTb.jpg,http://i.imgur.com/nBjjIb.jpg,http://i.imgur.com/PMwbCb.jpg,http://i.imgur.com/AHs3Yb.jpg,http://i.imgur.com/ABjV6b.jpg,http://i.imgur.com/XQLXbb.jpg,http://i.imgur.com/i6Z0Qb.jpg,http://i.imgur.com/bjRNfb.jpg,http://i.imgur.com/Q0WQeb.jpg,http://i.imgur.com/sRsZPb.jpg,http://i.imgur.com/O2znUb.jpg,http://i.imgur.com/BUyyEb.jpg,http://i.imgur.com/nvnkSb.jpg,http://i.imgur.com/z0LdWb.jpg,http://i.imgur.com/Z42bhb.jpg,http://i.imgur.com/2sQT9b.jpg';
-var all_images = all_images_str.split(',');
+var all_images = fs.readdirSync(__dirname + '/public/images');
 
 function tick() {
   var tally_l = 0;
