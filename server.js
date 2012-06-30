@@ -72,9 +72,9 @@ function tick() {
       sockets[key].emit('outcome', {you:2, counts: [tally_l, tally_r], new_images: new_images});//0 for loss, 1 for win, -1 for no result / didn't play
     else if (players[key] === -1)
       sockets[key].emit('outcome', {you:-1, counts: [tally_l, tally_r], new_images: new_images});//0 for loss, 1 for win, -1 for no result / didn't play
-    else if (players[key] !== winner)
-      sockets[key].emit('outcome', {you:1, counts: [tally_l, tally_r], new_images: new_images});//0 for loss, 1 for win, -1 for no result / didn't play
     else if (players[key] === winner)
+      sockets[key].emit('outcome', {you:1, counts: [tally_l, tally_r], new_images: new_images});//0 for loss, 1 for win, -1 for no result / didn't play
+    else if (players[key] !== winner)
       sockets[key].emit('outcome', {you:0, counts: [tally_l, tally_r], new_images: new_images});//0 for loss, 1 for win, -1 for no result / didn't play
   }
   for(key in players){
