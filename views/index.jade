@@ -8,8 +8,10 @@
       #players
     h1#state
     #buttons
-      #left(onclick="left()") LEFT IMAGE
-      #right(onclick="right()") RIGHT IMAGE
+      span#left(onclick="left()")
+        img
+      span#right(onclick="right()")
+        img
 
 
 script(src="/socket.io/socket.io.js")

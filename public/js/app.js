@@ -18,6 +18,7 @@ function page_is_loading(state) {
 var players = {};
 var my_name = "anon";
 var played = true;
+var selection = -1;
 $('#state').text("Waiting for next round to start");
 
 var App = {
@@ -42,6 +43,16 @@ var App = {
     } else {
       $('#buttons').show();
     }
+    if (selection === 0){
+      $('#right img').removeClass('border');
+      $('#left img').addClass('border');
+    } else if (selection === 1) {
+      $('#right img').addClass('border');
+      $('#left img').removeClass('border');
+    } else {
+      $('#right img').removeClass('border');
+      $('#left img').removeClass('border');
+    }
   }
 };
 
@@ -51,32 +62,35 @@ socket.on('announce_players', function(p) {
 });
 
 function left(){
-  select(0);
+  selection = 0;
+  select();
+  App.render();
 }
 function right(){
-  select(1);
+  selection = 1;
+  select();
+  App.render();
 }
-function select(which){
-  if (which === 0){
-    $('#right').removeClass('border');
-    $('#left').addClass('border');
-  } else {
-    $('#right').addClass('border');
-    $('#left').removeClass('border');
-  }
-  socket.emit('play', my_name, which);
+function select(){
+  socket.emit('play', my_name, selection);
 }
 
 socket.on('outcome', function(data) {
+  var state = '';
   if(data.you === 1){
-    $('#state').text("You win! Choose again!");
+    state = "You win! Choose again!";
   } else if(data.you === 2){
-    $('#state').text("Draw. Choose again!");
+    state = "Draw. Choose again!";
   } else if (data.you === 0) {
-    $('#state').text("You lose. Choose again!");
+    state = "You lose. Choose again!";
   } else if (data.you === -1) {
-    $('#state').text("Choose the less popular image!");
+    state = "Choose the less popular image!";
   }
+  state += ' Previous round -- left: ' + data.counts[0] + ' right: ' + data.counts[1];
+  selection = -1;
+  $('#state').text(state);
+  $('#left img').attr('src', data.new_images[0]);
+  $('#right img').attr('src', data.new_images[1]);
   played = false;
   App.render();
 });
