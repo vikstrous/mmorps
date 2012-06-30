@@ -34,12 +34,53 @@ sio.sockets.on('connection', onconnect);
 
 
 //name:data hash map
-players = {};
+var players = {};
+var sockets = {};
+
+var interval = setInterval(tick, 15000);
+
+function tick() {
+  var tally_l = 0;
+  var tally_r = 0;
+  for(var key in players){
+    if ( players[key] === 0){
+      tally_l += 1;
+    } else if (players[key] === 1){
+      tally_r += 1;
+    }
+  }
+  var winner;
+  if (tally_l == tally_r)
+    winner = 2;
+  if (tally_l > tally_r)
+    winner = 0;
+  if (tally_l < tally_r)
+    winner = 1;
+  for(key in players){
+    if(winner == 2)
+      sockets[key].emit('outcome', {you:2, counts: [tally_l, tally_r]});//0 for loss, 1 for win, -1 for no result / didn't play
+    else if (players[key] === -1)
+      sockets[key].emit('outcome', {you:-1, counts: [tally_l, tally_r]});//0 for loss, 1 for win, -1 for no result / didn't play
+    else if (players[key] === winner)
+      sockets[key].emit('outcome', {you:1, counts: [tally_l, tally_r]});//0 for loss, 1 for win, -1 for no result / didn't play
+    else if (players[key] !== winner)
+      sockets[key].emit('outcome', {you:0, counts: [tally_l, tally_r]});//0 for loss, 1 for win, -1 for no result / didn't play
+  }
+}
 
 function onconnect(socket) {
-  socket.on('join', function(name, cb) {
-    players[name] = {};
+  socket.on('join', function(name) {
+    players[name] = -1;
+    sockets[name] = socket;
+    socket.name = name;
     sio.sockets.emit('announce_players', players);
-    // if(typeof cb == 'function') cb(players);
   });
+  socket.on('play', function(name, value) {
+    players[name] = value;
+  });
+  socket.on('disconnect', function() {
+      delete players[socket.name];
+      delete sockets[socket.name];
+  });
+
 }
