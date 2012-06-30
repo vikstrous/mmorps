@@ -26,9 +26,22 @@ var App = {
   state: 'main_menu',
 
   init: function(){
-    my_name = prompt("What's your name?");
-    socket.emit('join', my_name);
-    App.render();
+    App.name_pick();
+  },
+
+  name_pick: function(){
+    my_name = '';
+    while(my_name == null || my_name == ''){
+      my_name = prompt("What's your name?");
+    }
+    socket.emit('join', my_name, function(success){
+      if(!success){
+        alert("Name taken!");
+        App.name_pick();
+      } else {
+        App.render();
+      }
+    });
   },
 
   render: function(){

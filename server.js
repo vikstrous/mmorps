@@ -83,11 +83,16 @@ function tick() {
 }
 
 function onconnect(socket) {
-  socket.on('join', function(name) {
+  socket.on('join', function(name, cb) {
+    if(players[name] !== undefined){
+      cb(0);
+      return;
+    }
     players[name] = -1;
     sockets[name] = socket;
     socket.name = name;
     sio.sockets.emit('announce_players', players);
+    cb(1);
   });
   socket.on('play', function(name, value) {
     players[name] = value;
