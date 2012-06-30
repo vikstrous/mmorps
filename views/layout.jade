@@ -1,0 +1,17 @@
+!!! 5
+html
+  head
+    title MMO Rock Paper Scissors
+    link(rel="stylesheet", type="text/css", href="/css/reset.css")
+    link(rel="stylesheet", type="text/css", href="/css/style.css")
+    script(src="/js/lib/jquery.min.js")
+    script(src="/js/lib/mustache.js")
+  body
+    #overlay
+      img(src="/images/load48.gif")
+    .main
+      - // this is to make padding work without messing up 100% min height
+      .main-inner
+        .banner
+          a(href='/') MMO Rock Paper Scissors
+        != body
