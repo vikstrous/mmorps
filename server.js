@@ -38,6 +38,8 @@ players = {};
 
 function onconnect(socket) {
   socket.on('join', function(name, cb) {
-
+    players[name] = {};
+    sio.sockets.emit('announce_players', players);
+    // if(typeof cb == 'function') cb(players);
   });
 }
