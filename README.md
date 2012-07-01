@@ -15,3 +15,4 @@ TODO:
 - display a 15 second count down
 - allow the user to participate in the first round when they join instead of waiting for the next one
 - better UI
+- change the name to something that makes sense
